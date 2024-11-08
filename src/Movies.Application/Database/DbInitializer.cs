@@ -36,6 +36,14 @@ public class DbInitializer
                 name TEXT NOT NULL);
         """);
 
+        await connection.ExecuteAsync("""
+            create table if not exists ratings (
+                userid UUID,
+                movieid UUID references movies(id),
+                rating integer NOT NULL,
+                primary key (userid, movieid));
+        """);
+
     }
 
 }

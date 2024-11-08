@@ -1,9 +1,9 @@
 using System;
 using Movies.Application.Models;
 
-namespace Movies.Application.Repositories;
+namespace Movies.Application.Services;
 
-public interface IMovieRepository
+public interface IMovieService
 {
     Task<bool> CreateAsync(Movie movie, CancellationToken cancellationToken = default);
 
@@ -13,11 +13,9 @@ public interface IMovieRepository
 
     Task<IEnumerable<Movie>> GetAllAsync(GetAllMoviesOptions options, CancellationToken cancellationToken = default);
 
-    Task<bool> UpdateAsync(Movie movie, CancellationToken cancellationToken = default);
+    Task<Movie?> UpdateAsync(Movie movie, Guid? userId = default, CancellationToken cancellationToken = default);
 
     Task<bool> DeleteByIdAsync(Guid id, CancellationToken cancellationToken = default);
-
-    Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<int> GetCountAsync(string? title, int? yearOfRelease, CancellationToken cancellationToken = default);
 
