@@ -45,7 +45,11 @@ public class SwaggerDefaultValues : IOperationFilter
 
             parameter.Description ??= description.ModelMetadata?.Description;
 
-            if (parameter.Schema.Default == null && description.DefaultValue != null)
+            if (parameter.Schema.Default == null
+                && description.DefaultValue != null
+                && description.DefaultValue is not DBNull
+                && description.ModelMetadata is { } modelMetadata
+                )
             {
                 var json = JsonSerializer.Serialize(
                     description.DefaultValue,
