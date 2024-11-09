@@ -1,14 +1,17 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Api.Auth;
 using Movies.Api.Mapping;
+using Movies.Application.Models;
 using Movies.Application.Services;
 using Movies.Contracts.Requests;
 
 namespace Movies.Api.Controllers
 {
     [ApiController]
+    [ApiVersion(1.0)]
     public class RatingsController : ControllerBase
     {
         private readonly IRatingService _ratingService;
@@ -20,6 +23,8 @@ namespace Movies.Api.Controllers
 
         [Authorize]
         [HttpPut(ApiEndpoints.Movies.Rate)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RateMovie([FromRoute] Guid id,
             [FromBody] RateMovieRequest request,
             CancellationToken cancellationToken)
@@ -33,6 +38,8 @@ namespace Movies.Api.Controllers
 
         [Authorize]
         [HttpDelete(ApiEndpoints.Movies.DeleteRating)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteRating([FromRoute] Guid id,
             CancellationToken cancellationToken)
         {
@@ -45,6 +52,7 @@ namespace Movies.Api.Controllers
 
         [Authorize]
         [HttpGet(ApiEndpoints.Ratings.GetUserRatings)]
+        [ProducesResponseType(typeof(IEnumerable<MovieRating>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserRatings(CancellationToken cancellationToken)
         {
             var userId = HttpContext.GetUserId();
